@@ -6,6 +6,7 @@ filter_datum that returns a log message
 
 import re
 import logging
+# from logging import logger
 from typing import List
 
 
@@ -38,3 +39,27 @@ def filter_datum(fields: List[str], redaction: str,
     pattern = r'\b(' + '|'.join(fields) + r')\b' + \
               re.escape(separator) + r'(.*?)'
     return re.sub(pattern, r'\1' + separator + redaction, message)
+
+
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
+
+
+def get_logger() -> logging.Logger:
+    """
+    This function initializes a logger user_data and
+    return a logger object
+    """
+    logger = logging.getLogger("user_data")
+    # Setting the logger level to INFO
+    logger.setLevel(logging.INFO)
+    # Disabling propagation
+    logger.propagate = False
+
+    # Instantiating a StreamHandler
+    console_handler = logging.StreamHandler()
+    # Passing the PII_FIELDS to RedactingFormatter
+    formatter = RedactingFormatter(PII_FIELDS)
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+
+    return logger
