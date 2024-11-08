@@ -6,6 +6,8 @@ filter_datum that returns a log message
 
 import re
 import logging
+import os
+import mysql.connector
 # from logging import logger
 from typing import List
 
@@ -63,3 +65,25 @@ def get_logger() -> logging.Logger:
     logger.addHandler(console_handler)
 
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """
+    This function connects to a secure holberton
+    database to read a users table.
+    """
+    # Retrieving the database credentials
+    DB_USERNAME = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    DB_PASSWORD = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    DB_HOST = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    DB_NAME = os.getenv("PERSONAL_DATA_DB_NAME")
+
+    # Connecting to the database
+    mydb = mysql.connector.connect(
+        user=DB_USERNAME,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        database=DB_NAME
+    )
+
+    return mydb
