@@ -89,12 +89,42 @@ class BasicAuth(Auth):
             return None
 
         # fetching the user from the database based on user_email
-        users = User.search({'email': user_email})
+        user = User()
+        users = user.search({'email': user_email})
         if not users:
             return None
 
-        user = users[0]
-        if not user.is_valid_password(user_pwd):
+        user1 = users[0]
+        if not user1.is_valid_password(user_pwd):
             return None
 
+        return user1
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """This method overloads Auth and retrieves the User
+        instance for a request
+        """
+        # print("headers: ", request.headers)
+        # Fetching the authorization header
+        header = self.authorization_header(request)
+        if header is None:
+            return None
+
+        # Extracting the base64 string from the header
+        extracted_base64 = self.extract_base64_authorization_header(header)
+        if extracted_base64 is None:
+            return None
+
+        # decoding the extracted string to UTF-8
+        dec_base64 = self.decode_base64_authorization_header(extracted_base64)
+        if dec_base64 is None:
+            return None
+
+        # Getting the user credentials from the database through decoded string
+        email, password = self.extract_user_credentials(dec_base64)
+        if email is None or password is None:
+            return None
+
+        # Getting the user with the credentials
+        user = self.user_object_from_credentials(email, password)
         return user
