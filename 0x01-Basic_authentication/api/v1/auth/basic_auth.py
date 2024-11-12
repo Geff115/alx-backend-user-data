@@ -69,11 +69,12 @@ class BasicAuth(Auth):
 
         # getting the email and password by slicing the string
         string_header = decoded_base64_authorization_header
-        for i in range(len(string_header)):
-            if string_header[i] == ":":
-                email = string_header[:i]
-                password = string_header[i+1:]
-                return email, password
+
+        # splitting the string at the first occurence of :
+        splitted_string = string_header.split(":", 1)
+        if splitted_string:
+            email, password = splitted_string
+            return email, password
 
         return None, None
 
