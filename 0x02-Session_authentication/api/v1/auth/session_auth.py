@@ -29,5 +29,5 @@ class SessionAuth(Auth):
 
         session_id = uuid.uuid4()
         # Setting the key of the dictionary user_id_by_session_id
-        self.user_id_by_session_id['session_id'] = user_id
+        self.user_id_by_session_id[session_id] = user_id
         return session_id
