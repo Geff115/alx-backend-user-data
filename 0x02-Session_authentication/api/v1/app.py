@@ -18,12 +18,16 @@ auth = None
 auth_type = os.getenv('AUTH_TYPE')
 
 # Based on the value of auth_type, create instance of Auth/BasicAuth
-if auth_type == 'basic_auth':
+# and SessionAuth
+if auth_type == 'auth':
+    from api.v1.auth.auth import Auth
+    auth = Auth()
+elif auth_type == 'basic_auth':
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
 else:
-    from api.v1.auth.auth import Auth
-    auth = Auth()
+    from api.v1.auth.session_auth import SessionAuth
+    auth = SessionAuth()
 
 
 @app.errorhandler(404)
