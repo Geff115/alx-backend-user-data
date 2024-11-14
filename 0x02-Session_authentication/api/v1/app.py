@@ -59,7 +59,8 @@ def before_request():
 
     list_paths = ['/api/v1/status/',
                   '/api/v1/unauthorized/',
-                  '/api/v1/forbidden/'
+                  '/api/v1/forbidden/',
+                  '/api/v1/auth_session/login/'
                   ]
     # Checking if request.path is not part of this list
     if request.path not in list_paths:
@@ -67,6 +68,10 @@ def before_request():
             return
 
         if auth.authorization_header(request) is None:
+            abort(401)
+        
+        if auth.authorization_header(request) is None and \
+           auth.session_cookie(request) is None:
             abort(401)
 
         if auth.current_user(request) is None:
