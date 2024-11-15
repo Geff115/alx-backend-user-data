@@ -1,16 +1,16 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
 Session Authentication view
 """
 
 import os
-from flask import jsonify, request, Response
+from flask import jsonify, request, make_response
 from api.v1.views import app_views
 from models.user import User
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
-def auth_session_login() -> Response:
+def auth_session_login():
     """Authenticating a user session"""
     # Getting the email and password parameters
     email = request.form.get('email')
