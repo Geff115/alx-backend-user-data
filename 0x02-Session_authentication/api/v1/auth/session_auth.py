@@ -6,6 +6,7 @@ from the Auth class
 
 import uuid
 from api.v1.auth.auth import Auth
+from models.user import User
 
 
 class SessionAuth(Auth):
@@ -36,6 +37,7 @@ class SessionAuth(Auth):
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """Returning a User ID based on the session ID"""
+
         if session_id is None:
             return None
 
@@ -46,3 +48,15 @@ class SessionAuth(Auth):
         user_id = self.user_id_by_session_id.get(session_id)
 
         return user_id
+
+    def current_user(self, request=None):
+        """Using a session ID to identify a user"""
+        # Fetching the cookie value from the request header
+        session_id = self.session_cookie(request)
+        # Retrieving the user_id based on the cookie value
+        user_id = self.user_id_for_session_id(session_id)
+
+        # Fetching the user from the database
+        user = User.get(user_id)
+
+        return user
