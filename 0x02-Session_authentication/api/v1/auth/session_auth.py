@@ -6,7 +6,6 @@ from the Auth class
 
 import uuid
 import os
-from api.v1.views import app_views
 from api.v1.auth.auth import Auth
 from models.user import User
 from flask import jsonify, request, Response
@@ -66,7 +65,7 @@ class SessionAuth(Auth):
         user = User.get(user_id)
         return user
 
-    def destroy_session(self, request=None) -> bool:
+    def destroy_session(self, request=None):
         """Deleting the user session/logout"""
         if request is None:
             return False

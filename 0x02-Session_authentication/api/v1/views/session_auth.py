@@ -4,14 +4,15 @@ Session Authentication view
 """
 
 import os
-from flask import jsonify, request, make_response
 from api.v1.views import app_views
+from flask import jsonify, request, make_response
 from models.user import User
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def auth_session_login():
     """Authenticating a user session"""
+    from api.v1.app import auth
     # Getting the email and password parameters
     email = request.form.get('email')
     password = request.form.get('password')
@@ -49,7 +50,6 @@ def auth_session_login():
 def auth_session_logout():
     """Logs out a user by destroying the session"""
     from api.v1.app import auth
-
     if not auth.destroy_session(request):
         abort(404)
 
