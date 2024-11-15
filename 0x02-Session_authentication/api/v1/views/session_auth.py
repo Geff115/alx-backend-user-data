@@ -12,7 +12,6 @@ from models.user import User
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def auth_session_login():
     """Authenticating a user session"""
-    from api.v1.app import auth
     # Getting the email and password parameters
     email = request.form.get('email')
     password = request.form.get('password')
