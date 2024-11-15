@@ -41,4 +41,4 @@ def auth_session_login() -> Response:
     session_name = os.getenv('SESSION_NAME')
     response.set_cookie(session_name, session_id)
 
-    
+    return response
