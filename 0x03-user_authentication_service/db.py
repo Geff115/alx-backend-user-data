@@ -62,3 +62,25 @@ class DB:
             raise NoResultFound
 
         return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """This method updates a user's credentials based
+        on the user's id.
+        """
+        if not user_id:
+            raise ValueError("A valid user_id must be provided")
+
+        if not kwargs:
+            raise ValueError("key=value words must be passed in")
+
+        # Getting the user by user_id
+        found_user = self.find_user_by(id=user_id)
+        # Updating the found user's attribute by looping through kwargs
+        for key, value in kwargs.items():
+            if hasattr(User, key):
+                setattr(found_user, key, value)
+            else:
+                raise KeyError(f"Invalid key to update: {key}")
+
+        # Commiting the changes to the database
+        self._session.commit()
