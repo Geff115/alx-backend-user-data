@@ -3,7 +3,7 @@
 A basic Flask app
 """
 
-from flask import Flask
+from flask import Flask, redirect
 from flask import jsonify, request, abort, make_response
 from auth import Auth
 
@@ -57,6 +57,19 @@ def login():
     response.set_cookie("session_id", session_id)
 
     return response
+
+
+@app.route("/logout", methods=["DELETE"])
+def logout():
+    """Logout endpoint"""
+    session_id = request.cookies.get("session_id")
+    # finding the user with the associated session_id
+    user = AUTH.get_user_from_session_id(session_id)
+    if user:
+        AUTH.destroy_session(user.id)
+        return redirect("/")
+    else:
+        abort(403)
 
 
 if __name__ == "__main__":
