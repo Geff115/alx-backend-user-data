@@ -59,7 +59,7 @@ def login():
     return response
 
 
-@app.route("/logout", methods=["DELETE"])
+@app.route("/sessions", methods=["DELETE"])
 def logout():
     """Logout endpoint"""
     session_id = request.cookies.get("session_id")
@@ -69,14 +69,9 @@ def logout():
     user = AUTH.get_user_from_session_id(session_id)
     if user:
         AUTH.destroy_session(user.id)
+        return redirect("/")
     else:
         abort(403)
-
-    # Creating a response to clear the session cookie
-    response = make_response(redirect("/"))
-    response.delete_cookie("session_id")
-
-    return response
 
 
 if __name__ == "__main__":
