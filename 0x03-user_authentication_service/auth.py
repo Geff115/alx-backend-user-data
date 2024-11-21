@@ -78,6 +78,20 @@ class Auth:
 
         return user
 
+    def destroy_session(self, user_id: int) -> None:
+        """This method updates the corresponding user's
+        session id to None
+        """
+        if not user_id:
+            return None
+
+        try:
+            user = self._db.find_user_by(id=user_id)
+        except NoResultFound:
+            return None
+
+        self._db.update_user(user_id, session_id=None)
+
 
 def _hash_password(password: str) -> bytes:
     """Hashing password with bcrypt
