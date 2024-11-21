@@ -5,6 +5,7 @@ that returns bytes
 """
 
 import bcrypt
+import uuid
 from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
@@ -63,3 +64,9 @@ def _hash_password(password: str) -> bytes:
     hashed_password = bcrypt.hashpw(bytes_password, salt)
 
     return hashed_password
+
+
+def _generate_uuid() -> str:
+    """Generating a uuid string"""
+    id_string = str(uuid.uuid4())
+    return id_string
