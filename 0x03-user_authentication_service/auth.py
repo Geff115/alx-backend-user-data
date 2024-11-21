@@ -107,6 +107,27 @@ class Auth:
         except NoResultFound:
             raise ValueError
 
+    def update_password(self, reset_token: str, password: str) -> None:
+        """Updating the password for a user"""
+        if not reset_token:
+            raise ValueError("Reset password token must me provided")
+
+        if not password or not isinstance(password, str):
+            raise ValueError("Password must be provided")
+
+        try:
+            # Finding the user based on the reset token
+            user = self._db.find_user_by(reset_token=reset_token)
+        except NoResultFound:
+            raise ValueError
+
+        hashed_password = _hash_password(password)
+        updated_user = self._db.update_user(
+            user.id,
+            hashed_password=hashed_password,
+            reset_token=None
+        )
+
 
 def _hash_password(password: str) -> bytes:
     """Hashing password with bcrypt
