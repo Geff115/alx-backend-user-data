@@ -92,6 +92,21 @@ class Auth:
 
         self._db.update_user(user_id, session_id=None)
 
+    def get_reset_password_token(self, email: str) -> str:
+        """Getting the reset password token"""
+        if not email:
+            raise ValueError("Email is required")
+
+        try:
+            user = self._db.find_user_by(email=email)
+            if user:
+                token = _generate_uuid()
+                # Update user's reset_token
+                self._db.update_user(user.id, reset_token=token)
+                return token
+        except NoResultFound:
+            raise ValueError
+
 
 def _hash_password(password: str) -> bytes:
     """Hashing password with bcrypt
