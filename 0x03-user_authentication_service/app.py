@@ -38,8 +38,8 @@ def users():
 
 
 @app.route("/sessions", methods=["POST"])
-def sessions():
-    """user sessions"""
+def login():
+    """The endpoint that handles user's login"""
     # fetching user's email and password from request
     email = request.form.get("email")
     password = request.form.get("password")

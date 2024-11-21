@@ -10,6 +10,7 @@ from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
+from typing import Optional
 
 
 class Auth:
@@ -64,6 +65,18 @@ class Auth:
         self._db.update_user(user.id, session_id=session_id)
 
         return session_id
+
+    def get_user_from_session_id(self,
+                                 session_id: str) -> Optional[User, None]:
+        """Geetting a user based on session id"""
+        if not session_id:
+            return None
+
+        user = self._db.find_user_by(session_id=session_id)
+        if not user:
+            return None
+
+        return user
 
 
 def _hash_password(password: str) -> bytes:
